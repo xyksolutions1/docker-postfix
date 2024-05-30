@@ -1,3 +1,9 @@
+## 1.1.6 2024-05-30 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for trust_ca function getting clobbered
+
+
 ## 1.1.5 2024-05-30 <dave at tiredofit dot ca>
 
    ### Reverted

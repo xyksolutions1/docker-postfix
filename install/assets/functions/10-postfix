@@ -168,6 +168,9 @@ EOF
         fi
     }
 
+    trust_ca() {
+        if var_true "$CREATE_CA" ; then
+            if [ -f "${CA_CERT_FILE}" ]; then
                 if [ ! -f /usr/local/share/ca-certificates/"$(basename "${CA_CERT_FILE}")" ] ; then
                     print_debug "[certificates | trust_ca] Trusting CA ${CA_NAME}"
                     ln -sf "${CA_CERT_FILE}" /usr/local/share/ca-certificates/
