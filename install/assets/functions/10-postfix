@@ -168,22 +168,6 @@ EOF
         fi
     }
 
-    check_dhparam() {
-        print_debug "[certificates | check_dhparam] Checking Existence of ${TLS_SERVER_DH_PARAM_FILE}"
-        if [ ! -f "${TLS_SERVER_DH_PARAM_FILE}" ] ; then
-                create_dhparam
-        fi
-    }
-
-    create_dhparam() {
-        print_notice "[certificates | create_dhparam] Creating ${TLS_SERVER_DH_PARAM_FILE}"
-        mkdir -p "$(dirname "${TLS_SERVER_DH_PARAM_FILE}")"
-        silent ${ssl_exec} dhparam -out "${TLS_SERVER_DH_PARAM_FILE}" "${TLS_SERVER_DH_PARAM_KEYSIZE}"
-    }
-
-    trust_ca() {
-        if var_true "$CREATE_CA" ; then
-            if [ -f "${CA_CERT_FILE}" ]; then
                 if [ ! -f /usr/local/share/ca-certificates/"$(basename "${CA_CERT_FILE}")" ] ; then
                     print_debug "[certificates | trust_ca] Trusting CA ${CA_NAME}"
                     ln -sf "${CA_CERT_FILE}" /usr/local/share/ca-certificates/
@@ -211,9 +195,6 @@ EOF
     fi
 
     case "${1,,}" in
-        "dhparam" )
-            check_dhparam
-        ;;
         *)
             check_certificates "${1}"
             check_permissions "${1}"
@@ -1046,7 +1027,6 @@ smtpd_tls_loglevel                  = ${LOG_LEVEL_TLS_SERVER}
 smtpd_tls_received_header           = ${TLS_SERVER_RECEIVED_HEADER}
 smtpd_tls_session_cache_timeout     = ${TLS_SERVER_SESSION_CACHE_TIMEOUT}
 tls_random_source                   = dev:/dev/urandom
-smtpd_tls_dh1024_param_file         = ${TLS_SERVER_DH_PARAM_FILE}
 smtpd_tls_session_cache_database    = lmdb:${CONFIG_PATH}/smtpd_scache
 smtpd_tls_mandatory_exclude_ciphers = ${TLS_SERVER_MANDATORY_EXCLUDE_CIPHERS}
 smtpd_tls_mandatory_protocols       = ${TLS_SERVER_MANDATORY_PROTOCOLS}
@@ -1262,7 +1242,6 @@ configure_postsrsd() {
 }
 
 configure_tls() {
-    certificates dhparam
     certificates "${TLS_SERVER_CERT_FILE}"
 }
 

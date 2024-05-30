@@ -1,3 +1,9 @@
+## 1.1.5 2024-05-30 <dave at tiredofit dot ca>
+
+   ### Reverted
+      - Remove dhparam generation, and config settings
+
+
 ## 1.1.4 2024-05-22 <dave at tiredofit dot ca>
 
    ### Added
